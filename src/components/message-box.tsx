@@ -12,7 +12,6 @@ import {
     FormItem,
     FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Separator } from "@/components/ui/separator.tsx";
 import {
@@ -68,7 +67,7 @@ export function MessageBox() {
                                         field.ref(e);
                                         textareaRef.current = e;
                                     }}
-                                    className="border-none shadow-none focus-visible:ring-0 pb-0 resize-none min-h-[40px] max-h-[200px] overflow-y-auto"
+                                    className="border-none shadow-none focus-visible:ring-0 pb-0 resize-none min-h-10 max-h-50 overflow-y-auto"
                                 />
                             </FormControl>
                             <FormMessage className="px-3" />

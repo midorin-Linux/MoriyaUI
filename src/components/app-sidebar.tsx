@@ -1,4 +1,4 @@
-import {AppWindow, MessageCircle, Plus, ChevronUp } from "lucide-react";
+import {AppWindow, MessageCircle, Plus } from "lucide-react";
 import {
     Sidebar,
     SidebarContent,
@@ -12,12 +12,6 @@ import {
     SidebarMenuButton,
 } from "@/components/ui/sidebar"
 import {Separator} from "@/components/ui/separator.tsx";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 
 export function AppSidebar() {
     return (

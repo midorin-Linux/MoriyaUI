@@ -13,7 +13,7 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
-import { Separator } from "@/components/ui/separator.tsx";
+import { Separator } from "@/components/ui/separator";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -21,7 +21,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { InputGroupButton } from "@/components/ui/input-group"
-import {Switch} from "@/components/ui/switch.tsx";
+import {Switch} from "@/components/ui/switch";
 
 const formSchema = z.object({
     prompt: z.string().min(1, {

@@ -2,7 +2,7 @@
 import "./App.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { MessageBox } from "@/components/message-box.tsx";
+import { MessageBox } from "@/components/message-box";
 
 const Header = () => {
     return (

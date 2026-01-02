@@ -11,7 +11,7 @@ import {
     SidebarMenuItem,
     SidebarMenuButton,
 } from "@/components/ui/sidebar"
-import {Separator} from "@/components/ui/separator.tsx";
+import {Separator} from "@/components/ui/separator";
 
 export function AppSidebar() {
     return (

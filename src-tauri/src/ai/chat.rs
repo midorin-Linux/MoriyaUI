@@ -5,14 +5,16 @@ use async_openai::{
     Client,
     config::OpenAIConfig,
     types::chat::{
-        ChatCompletionRequestSystemMessage, ChatCompletionRequestUserMessage,
+        ChatCompletionRequestAssistantMessageArgs,
+        ChatCompletionRequestSystemMessageArgs,
+        ChatCompletionRequestUserMessageArgs,
+        ChatCompletionRequestMessage,
         CreateChatCompletionRequestArgs,
     },
 };
 
 const API_BASE: &str = "http://localhost:1234/v1";
 const MODEL_NAME: &str = "unsloth/gpt-oss-20b";
-const SYSTEM_PROMPT: &str = "You are a helpful assistant.";
 const MAX_TOKENS: u16 = 8192;
 
 #[tauri::command(rename_all = "camelCase")]
@@ -23,7 +25,6 @@ pub async fn chat(chat_conversation_uuid: String, user_prompt: String) -> Result
 
     let mut chat_conversation: Store = serde_json::from_str(&chat_conversation_json)
         .map_err(|e| e.to_string())?;
-    chat_conversation.messages.push(Message { role: "system".to_string(), content: SYSTEM_PROMPT.to_string()});
     chat_conversation.messages.push(Message { role: "user".to_string(), content: user_prompt.clone()});
 
     let client = Client::with_config(
@@ -32,14 +33,35 @@ pub async fn chat(chat_conversation_uuid: String, user_prompt: String) -> Result
             .with_api_key(std::env::var("OPENAI_API_KEY").unwrap_or_else(|_| "suwako".to_string()))
     );
 
+    let messages: Vec<ChatCompletionRequestMessage> = chat_conversation.messages.iter().map(|msg| {
+        match msg.role.as_str() {
+            "system" => ChatCompletionRequestSystemMessageArgs::default()
+                .content(msg.content.clone())
+                .build()
+                .unwrap()
+                .into(),
+            "user" => ChatCompletionRequestUserMessageArgs::default()
+                .content(msg.content.clone())
+                .build()
+                .unwrap()
+                .into(),
+            "assistant" => ChatCompletionRequestAssistantMessageArgs::default()
+                .content(msg.content.clone())
+                .build()
+                .unwrap()
+                .into(),
+            _ => ChatCompletionRequestUserMessageArgs::default()
+                .content(msg.content.clone())
+                .build()
+                .unwrap()
+                .into(),
+        }
+    }).collect();
+
     let request = CreateChatCompletionRequestArgs::default()
         .max_tokens(MAX_TOKENS)
         .model(MODEL_NAME)
-        .store(true)
-        .messages([
-            ChatCompletionRequestSystemMessage::from(SYSTEM_PROMPT).into(),
-            ChatCompletionRequestUserMessage::from(user_prompt).into(),
-        ])
+        .messages(messages)
         .build()
         .map_err(|e| e.to_string())?;
 

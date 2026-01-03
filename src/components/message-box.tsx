@@ -57,7 +57,7 @@ export function MessageBox({ onSendMessage }: MessageBoxProps) {
     }
 
     return (
-        <div className="rounded-xl border p-2 text-sm w-full shadow-lg hover:border-gray-300">
+        <div className="rounded-xl border p-2 text-sm w-full shadow-lg bg-white hover:border-gray-300">
             <Form {...form}>
                 <form className="flex flex-col gap-1 justify-between" onSubmit={form.handleSubmit(onSubmit)}>
                     <FormField control={form.control} name="userPrompt" render={({ field }) => (
@@ -66,6 +66,12 @@ export function MessageBox({ onSendMessage }: MessageBoxProps) {
                                 <Textarea
                                     placeholder="Ask Anything..."
                                     {...field}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter" && e.shiftKey) {
+                                            e.preventDefault();
+                                            form.handleSubmit(onSubmit)();
+                                        }
+                                    }}
                                     ref={(e) => {
                                         field.ref(e);
                                         textareaRef.current = e;

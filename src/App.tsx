@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
@@ -33,6 +33,7 @@ const ChatInterface = () => {
     const navigate = useNavigate();
     const { chatId } = useParams();
     const location = useLocation();
+    const processingPrompt = useRef<string | null>(null);
 
     const handleSendMessage = useCallback(async (prompt: string) => {
         if (!chatId) {
@@ -61,10 +62,12 @@ const ChatInterface = () => {
         if (location.state && typeof location.state === 'object' && 'prompt' in location.state && chatId) {
             const state = location.state as { prompt: string };
             const prompt = state.prompt;
-            // Clear state to avoid re-sending on refresh
-            navigate(location.pathname, { replace: true, state: {} });
             
-            // Send the message
+            if (processingPrompt.current === prompt) return;
+            processingPrompt.current = prompt;
+
+            navigate(location.pathname, { replace: true, state: {} });
+
             handleSendMessage(prompt);
         }
     }, [location, chatId, navigate, handleSendMessage]);
@@ -72,7 +75,7 @@ const ChatInterface = () => {
     return (
         <main className="w-full bg-white relative h-screen flex flex-col">
             <Header />
-            <div className="flex-1 overflow-y-auto pt-16 pb-32 px-5 flex flex-col gap-4">
+            <div className="flex-1 overflow-y-auto pt-16 pb-40 px-5 flex flex-col gap-4">
                 {messages.map((msg, i) => (
                     <div key={i} className={`p-3 rounded-lg max-w-[80%] whitespace-pre-wrap ${msg.role === "user" ? "bg-blue-500 text-white self-end" : "bg-gray-100 text-gray-800 self-start"}`}>
                         {msg.content}

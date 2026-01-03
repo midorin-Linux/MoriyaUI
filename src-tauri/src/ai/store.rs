@@ -1,5 +1,5 @@
 use std::io::Write;
-use crate::models::store::Store;
+use crate::models::store::{Message, Store};
 
 #[tauri::command(rename_all = "camelCase")]
 pub async fn create_new_chat_conversation() -> Result<Store, String> {
@@ -14,7 +14,7 @@ pub async fn create_new_chat_conversation() -> Result<Store, String> {
                 title: "新規チャット".to_string(),
                 created_at: chrono::Utc::now(),
                 updated_at: chrono::Utc::now(),
-                messages: vec![],
+                messages: vec![Message { role: "system".to_string(), content: "You are a helpful assistant.".to_string() }],
             };
 
             let json = serde_json::to_string_pretty(&property).map_err(|e| e.to_string())?;

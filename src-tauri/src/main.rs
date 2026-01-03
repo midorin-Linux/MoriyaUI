@@ -3,5 +3,6 @@
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() {
+    std::fs::create_dir_all("conversations").unwrap();
     moriyaui_lib::run()
 }

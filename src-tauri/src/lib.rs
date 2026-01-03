@@ -1,13 +1,14 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 mod ai;
+mod models;
 
-use crate::ai::chat::chat;
+use crate::ai::{chat::chat, store::create_new_chat_conversation};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![chat])
+        .invoke_handler(tauri::generate_handler![chat, create_new_chat_conversation])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

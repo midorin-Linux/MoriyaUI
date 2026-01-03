@@ -12,6 +12,7 @@ import {
     SidebarMenuButton,
 } from "@/components/ui/sidebar"
 import {Separator} from "@/components/ui/separator";
+import { Link } from "react-router-dom";
 
 export function AppSidebar() {
     return (
@@ -27,11 +28,11 @@ export function AppSidebar() {
                     <SidebarGroupContent>
                         <SidebarMenu>
                             <SidebarMenuItem>
-                                <SidebarMenuButton className="w-full p-1.5 text-black h-auto hover:bg-gray-200">
-                                    <a href="#" className="flex items-center justify-center my-auto gap-2">
+                                <SidebarMenuButton className="w-full p-1.5 text-black h-auto hover:bg-gray-200" asChild>
+                                    <Link to="/" className="flex items-center justify-center my-auto gap-2">
                                         <Plus className="flex size-6" />
                                         <span className="flex text-base font-normal">新規チャット</span>
-                                    </a>
+                                    </Link>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
                         </SidebarMenu>

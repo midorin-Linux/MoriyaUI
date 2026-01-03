@@ -24,20 +24,24 @@ import { InputGroupButton } from "@/components/ui/input-group"
 import {Switch} from "@/components/ui/switch";
 
 const formSchema = z.object({
-    prompt: z.string().min(1, {
+    userPrompt: z.string().min(1, {
         message: "Message must be at least 1 characters.",
     }),
 })
 
-export function MessageBox() {
+interface MessageBoxProps {
+    onSendMessage: (message: string) => void;
+}
+
+export function MessageBox({ onSendMessage }: MessageBoxProps) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            prompt: "",
+            userPrompt: "",
         },
     })
 
-    const promptValue = form.watch("prompt");
+    const promptValue = form.watch("userPrompt");
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
@@ -47,17 +51,16 @@ export function MessageBox() {
         }
     }, [promptValue]);
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        onSendMessage(values.userPrompt);
+        form.reset();
     }
 
     return (
         <div className="rounded-xl border p-2 text-sm w-full shadow-lg hover:border-gray-300">
             <Form {...form}>
                 <form className="flex flex-col gap-1 justify-between" onSubmit={form.handleSubmit(onSubmit)}>
-                    <FormField control={form.control} name="prompt" render={({ field }) => (
+                    <FormField control={form.control} name="userPrompt" render={({ field }) => (
                         <FormItem>
                             <FormControl>
                                 <Textarea
